@@ -1,7 +1,11 @@
 [package]
 name = "firefly-iii-rust"
+description = "An API wrapper for Firefly III https://www.firefly-iii.org/"
+repository = "https://github.com/catouc/firefly-iii-rust"
 version = "0.1.0"
 edition = "2021"
+authors = ["Philipp Böschen <cratesio@philipp.boeschen.me>"]
+license-file = "LICENSE"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
