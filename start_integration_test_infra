@@ -31,7 +31,7 @@ podman run \
 	--network=host \
 	fireflyiii/core:latest
 
-
+sleep 20
 export MYSQL_PWD='fireflyPassword'
 mysql -u firefly -h 127.0.0.1 < ./integration_test_setup.sql 
 

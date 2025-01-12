@@ -48,7 +48,6 @@ impl Client {
 
         let resp = match request.body() {
             Some(body) => {
-                println!("{:#?}", body);
                 req.send_json(body)
             },
             None => req.call(),
@@ -56,8 +55,6 @@ impl Client {
 
         match resp {
             Ok(resp) => {
-                eprintln!("{}", url);
-
                 if resp.status() == 204 {
                     Ok(R::Response::default()) 
                 } else {
