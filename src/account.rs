@@ -54,6 +54,8 @@ pub struct Attributes {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monthly_payment_date: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub notes: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub opening_balance: Option<String>,
