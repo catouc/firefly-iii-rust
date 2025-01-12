@@ -4,14 +4,14 @@ use crate::http::Method;
 use crate::requests::Request;
 use crate::response::*;
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug, Clone)]
 pub struct Data {
     pub r#type: String,
     pub id: String,
     pub attributes: Attributes,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug, Clone)]
 pub struct Attributes {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
@@ -24,7 +24,7 @@ pub struct Attributes {
     pub transactions: Vec<Transaction>,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug, Clone)]
 pub struct Transaction {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
@@ -80,6 +80,7 @@ impl Request for Create {
     }
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Get {
     pub id: String,
 }
@@ -93,7 +94,7 @@ impl Request for Get {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Delete {
     pub id: String,
 }
@@ -107,6 +108,7 @@ impl Request for Delete {
     }
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct List {
     pub current_page: u64,
     pub total_pages: u64,

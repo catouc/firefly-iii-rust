@@ -4,14 +4,14 @@ use crate::http::Method;
 use crate::requests::Request;
 use crate::response::*;
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug, Clone)]
 pub struct Data {
     pub attributes: Attributes,
     pub id: String,
     pub r#type: String,
 }
 
-#[derive(Deserialize, Default)]
+#[derive(Deserialize, Default, Debug, Clone)]
 pub struct Attributes {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_number: Option<String>,
@@ -68,6 +68,7 @@ pub struct Attributes {
     pub virtual_balance: Option<String>,
 }
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Get {
     id: String,
 }
@@ -81,7 +82,7 @@ impl Request for Get {
     }
 }
 
-#[derive(Serialize, Deserialize, Default,Clone, Debug)]
+#[derive(Serialize, Deserialize, Default, Clone, Debug)]
 pub struct Create {
     pub name: String,
     pub r#type: String, // should be an enum
@@ -137,7 +138,7 @@ impl Request for Create {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Delete {
     pub id: String,
 }
@@ -151,7 +152,7 @@ impl Request for Delete {
     }
 }
 
-#[derive(Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct List {
     pub current_page: u64,
     pub total_pages: u64,
