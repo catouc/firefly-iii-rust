@@ -4,6 +4,10 @@ use crate::error::Result;
 use crate::http::Method;
 use serde::de::DeserializeOwned;
 
+/// The main entry point into this crate. Hold the access token
+/// currently `base_url` needs to be post fixed with `/api` for
+/// this library to actually work.
+/// TODO: that should be fixed.
 #[derive(Debug)]
 pub struct Client {
     base_url: String,
@@ -17,6 +21,13 @@ pub fn new(base_url: &str, token: &str) -> Client {
 }
 
 impl Client {
+    /// This is our generic calling function for the API, the error
+    /// handling is somewhat ass since it doesn't use https://docs.rs/ureq/latest/ureq/enum.Error.html#examples
+    /// because the error enum in this repository somehow caused an
+    /// inifinite loop with the transformations.
+    ///
+    /// TODO: The error should properly parse the actually useful error
+    /// responses from the API.
     pub fn call<R: Request>(&self, request: R) -> Result<R::Response> {
         let url = format!("{}{}", self.base_url, request.endpoint());
         let mut req = match R::METHOD {
@@ -69,6 +80,8 @@ impl Client {
         }
     }
 
+    /// Consumes all pages of the API in sequence and assembles a flat Vec of
+    /// all pages.
     pub fn fetch_all<R, T>(&self, mut request: R) -> Result<Vec<T>>
     where
         R: Request<Response = PaginatedResponse<Vec<T>>> + Paginated + Clone,
