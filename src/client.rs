@@ -1,6 +1,7 @@
 use crate::requests::*;
 use crate::response::*;
 use crate::error::Result;
+use crate::error::Error;
 use crate::http::Method;
 use serde::de::DeserializeOwned;
 
@@ -63,16 +64,17 @@ impl Client {
                     Ok(result)
                 }
             },
-            Err(ureq::Error::Status(_, resp)) => {
-                let str_result = resp.into_string().unwrap();
-                println!("{:#?}", str_result);
-                Err(str_result.into())
-            },
             Err(err) => {
                 if let Some(body) = request.body() {
                     eprintln!("Body: {:#?}", body);
                 }
-                Err(err.into())
+                match err {
+                    ureq::Error::Status(status, response) => {
+                        let response_msg = response.into_string().unwrap_or_else(|_| "failed to parse response".to_string());
+                        Err(Error::HTTPErr{status, response_msg: response_msg.to_string()})
+                    },
+                    _ => Err(Error::IOErr(err.to_string())),
+                }
             },
         }
     }
