@@ -28,7 +28,7 @@ pub struct Attributes {
 pub struct Transaction {
     pub amount: String,
     pub date: String,
-    pub r#type: TransactionType,
+    pub r#type: Type,
     pub description: String,
     pub source_id: String,
     pub destination_id: String,
@@ -159,7 +159,7 @@ pub struct Transaction {
 
 #[derive(Serialize, Deserialize, Clone, Default, Debug)]
 #[serde(rename_all = "lowercase")]
-pub enum TransactionType {
+pub enum Type {
     #[default]
     Withdrawal,
     Deposit,
@@ -168,15 +168,15 @@ pub enum TransactionType {
     OpeningBalance,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Default, Deserialize, Clone, Debug)]
 pub struct Create {
     pub group_title: Option<String>,
     pub transactions: Vec<CreateTransaction>,
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Default, Deserialize, Clone, Debug)]
 pub struct CreateTransaction {
-    pub r#type: TransactionType,
+    pub r#type: Type,
     pub date: String,
     pub amount: String,
     pub description: String,
@@ -229,7 +229,7 @@ impl Request for Create {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Default, Deserialize, Clone, Debug)]
 pub struct Get {
     pub id: String,
 }
@@ -257,7 +257,7 @@ impl Request for Delete {
     }
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
+#[derive(Serialize, Default, Deserialize, Clone, Debug)]
 pub struct List {
     pub current_page: u64,
     pub total_pages: u64,

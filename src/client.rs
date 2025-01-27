@@ -58,15 +58,15 @@ impl Client {
                 if resp.status() == 204 {
                     Ok(R::Response::default()) 
                 } else {
-                    /*
-                    let str_result = resp.into_string().unwrap();
-                    println!("{:#?}", str_result);
-                    Ok(R::Response::default())
-                    */
                     let result: R::Response = resp.into_json()
                        .expect("json conversion failed on us");
                     Ok(result)
                 }
+            },
+            Err(ureq::Error::Status(_, resp)) => {
+                let str_result = resp.into_string().unwrap();
+                println!("{:#?}", str_result);
+                Err(str_result.into())
             },
             Err(err) => {
                 if let Some(body) = request.body() {

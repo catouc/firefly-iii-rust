@@ -1,13 +1,18 @@
-use thiserror::Error;
-
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Error, Debug)]
+#[derive(Debug)]
 pub enum Error {
-    #[error(transparent)]
-    HTTPErr(#[from] ureq::Error),
-    #[error(transparent)]
-    IOErr(#[from] std::io::Error),
+    HTTPErr{
+        status: u32,
+        response_msg: String,
+    },
+    IOErr,
+}
+
+impl From<ureq::Error> for Error {
+    fn from(err: ureq::Error) -> Self {
+        err.into()
+    }
 }
 
 impl From<&ureq::Error> for Error {

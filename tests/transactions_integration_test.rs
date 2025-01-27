@@ -37,32 +37,28 @@ fn transaction_create_list_delete() {
     expense_account_create_request.account_role = Some("defaultAsset".into());
     let expense_account = client.call(expense_account_create_request).unwrap();
 
+    let mut tx_deposit_struct = transaction::CreateTransaction::default();
+    tx_deposit_struct.amount = "100".into();
+    tx_deposit_struct.r#type = transaction::Type::Deposit;
+    tx_deposit_struct.date = "2024-10-10T01:00:00Z".into();
+    tx_deposit_struct.description = "test".into();
+    tx_deposit_struct.destination_id = Some(asset_account.data.id.clone());
+    tx_deposit_struct.source_id = Some(expense_account.data.id.clone());
     let tx_deposit = client.call(transaction::Create{
         group_title: None,
-        transactions: vec![transaction::CreateTransaction{
-            amount: "100".into(),
-            r#type: "deposit".into(),
-            date: "2024-10-10T01:00:00Z".into(),
-            description: "test".into(),
-            destination_id: Some(asset_account.data.id.clone()),
-            destination_name: None,
-            source_id: Some(expense_account.data.id.clone()),
-            source_name: None,
-        }],
+        transactions: vec![tx_deposit_struct],
     }).unwrap();
 
+    let mut tx_withdrawal_struct = transaction::CreateTransaction::default();
+    tx_withdrawal_struct.amount = "100".into();
+    tx_withdrawal_struct.r#type = transaction::Type::Withdrawal;
+    tx_withdrawal_struct.date = "2024-10-10T01:00:00Z".into();
+    tx_withdrawal_struct.description = "test".into();
+    tx_withdrawal_struct.destination_id = Some(expense_account.data.id.clone());
+    tx_withdrawal_struct.source_id = Some(asset_account.data.id.clone());
     let tx_withdrawal = client.call(transaction::Create{
         group_title: None,
-        transactions: vec![transaction::CreateTransaction{
-            amount: "100".into(),
-            r#type: "withdrawal".into(),
-            date: "2024-10-10T01:00:00Z".into(),
-            description: "test".into(),
-            destination_id: Some(expense_account.data.id.clone()),
-            destination_name: None,
-            source_id: Some(asset_account.data.id.clone()),
-            source_name: None,
-        }],
+        transactions: vec![tx_withdrawal_struct],
     }).unwrap();
 
     let _ = client.call(transaction::Delete{id: tx_deposit.data.id}).unwrap();
